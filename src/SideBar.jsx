@@ -5,14 +5,16 @@ import { FcInTransit } from "react-icons/fc";
 import { Menus } from "./utils/constants";
 import { RxDashboard } from "react-icons/rx";
 import { BsChevronDown } from "react-icons/bs";
+import Navbar from './Navbar';
 
 const SideBar = () => {
     const [open,setOpen]=useState(true)
     const [submenuOpen,setSubmenuOpen]=useState(false)
   return (
     <>
-    <div className={`bg-dark-navy text-white h-[100%] p-5 pt-8 duration-300 relative px-5  ${open?"w-72":"w-[78px]"} `}>
-        <BsArrowLeftShort className={`bg-white text-dark-navy text-3xl rounded-full absolute -right-3 top-9 border border-dark-navy cursor-pointer ${!open && "rotate-180"}`}
+    
+    <div className={`bg-dark-navy text-white h-[100%] p-5 pt-3 duration-300 relative px-5  ${open?"w-72":"w-[78px]"} `}>
+        <BsArrowLeftShort className={`bg-white text-dark-navy text-3xl rounded-full absolute -right-3 top-3 border border-dark-navy cursor-pointer ${!open && "rotate-180"}`}
         onClick={()=>{setOpen(!open)}}
         />
         <div className="inline-flex">
@@ -56,7 +58,8 @@ const SideBar = () => {
             ))
           }
         </div>
-     </div>  
+     </div> 
+     <Navbar open={open} setOpen={setOpen}/> 
     
     </>
   )
