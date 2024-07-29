@@ -6,10 +6,12 @@ import { Menus } from "./utils/constants";
 import { RxDashboard } from "react-icons/rx";
 import { BsChevronDown } from "react-icons/bs";
 import Navbar from './Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const SideBar = () => {
     const [open,setOpen]=useState(true)
     const [submenuOpen,setSubmenuOpen]=useState(false)
+    const navigate=useNavigate()
   return (
     <>
     
@@ -35,7 +37,10 @@ const SideBar = () => {
                       element.icon?element.icon:<RxDashboard/>
                     }
                   </span>
-                  <span className={`text-base font-mono flex-1 ${!open && "hidden"}`}>{element.title}</span>
+                  <span className={`text-base font-mono flex-1 ${!open && "hidden"}`
+                  }
+                  onClick={()=>{navigate(`/${element.navigateUrl}`)}}
+                  >{element.title}</span>
                   
                   {element.submenu && (
                     <BsChevronDown className="" onClick={()=>{setSubmenuOpen(!submenuOpen)}}/>
@@ -60,7 +65,7 @@ const SideBar = () => {
         </div>
      </div> 
      <Navbar open={open} setOpen={setOpen}/> 
-    
+  
     </>
   )
 }

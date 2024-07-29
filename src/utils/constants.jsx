@@ -50,7 +50,8 @@ export const Menus = [
     },
     {
         title: "Invoice",
-        icon: <PiInvoiceFill />
+        icon: <PiInvoiceFill />,
+        navigateUrl:"invoiceform"
     },
     {
         title: "Profile",
