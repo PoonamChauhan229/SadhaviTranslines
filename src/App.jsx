@@ -1,20 +1,20 @@
 
 import { Route ,Routes} from 'react-router-dom'
 import './App.css'
-import HomePage from './HomePage'
 import InvoiceForm from './InvoiceForm'
-import Navbar from './Navbar'
 import SideBar from './SideBar'
+import { useState } from 'react'
 
 
 export default function App() {
- 
+ const [globalCxt,setGlobalCxt]=useState({
+  open:true
+ })
   return (
     <>
      <div className="flex font-mono">
      
       <SideBar/>
-      {/* <HomePage/> */}
      
     </div>
     <Routes>
