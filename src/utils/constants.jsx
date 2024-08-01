@@ -67,3 +67,5 @@ export const Menus = [
         icon: <AiOutlineLogout />
     },
 ];
+
+export const url="http://localhost:8000"

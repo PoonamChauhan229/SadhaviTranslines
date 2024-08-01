@@ -1,6 +1,9 @@
-import React from 'react';
+import  { useState } from 'react';
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import axios from 'axios';
+import { url } from './utils/constants';
+
 
 // Function to convert number to words
 const numberToWords = (num) => {
@@ -35,6 +38,13 @@ const numberToWords = (num) => {
 
 
 const InvoiceForm = () => {
+  const [address_suggestions, setaddress_Suggestions] = useState([]);
+  const [showaddress_Suggestions, setShowaddress_Suggestions] = useState(false);
+
+  const [goods_suggestions, setgoods_Suggestions] = useState([]);
+  const [showgoods_Suggestions, setShowgoods_Suggestions] = useState(false);
+
+
   const initialValues = {
     date_lr: '',
     lr_no: '',
@@ -87,9 +97,41 @@ const InvoiceForm = () => {
     }
   };
 
+  // address
+  const handleAddressChange=async(query)=>{
+    console.log(query)
+    const response = await axios.get(`${url}/clients`, { params: { query } });
+    console.log(response.data)
+    setaddress_Suggestions(response.data)
+    setShowaddress_Suggestions(true)
+  }
+
+  const handleSuggestionClick = (suggestion, setFieldValue) => {
+    setFieldValue('address', suggestion.name+" "+suggestion.address);
+    setShowaddress_Suggestions(false);
+  };
+
+  // goods
+  const handleGoodsChange=async(query)=>{
+    console.log(query)
+    const response = await axios.get(`${url}/goods`, { params: { query } });
+    console.log(response.data)
+    setgoods_Suggestions(response.data)
+    setShowgoods_Suggestions(true)
+  }
+
+  const handleSuggestionGoodsClick = (suggestion, setFieldValue) => {
+    setFieldValue('description_of_goods', suggestion.description_goods);
+    setShowgoods_Suggestions(false);
+  };
   const handleSubmit = (values) => {
     console.log(values);
+    postInvoices(values)
   };
+
+  const postInvoices=async(invoice)=>{
+    await axios.post(`${url}/addinvoice`,invoice)
+  }
 
   return (
     <div className='absolute top-10 left-[19%] right-0 px-4'>
@@ -102,7 +144,7 @@ const InvoiceForm = () => {
                   <Form>
                     <div className="p-5 ">
                       <h1 className="text-gray-900 mb-3 text-xl font-semibold">
-                        Invoice Form
+                        Add Invoice
                       </h1>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div className="form-group">
@@ -127,8 +169,28 @@ const InvoiceForm = () => {
                         </div>
                         <div className="form-group">
                           <label htmlFor="description_of_goods" className="form-label">Description of Goods</label>
-                          <Field type="text" className="form-control" id="description_of_goods" name="description_of_goods" />
+                          <Field type="text" className="form-control" id="description_of_goods" name="description_of_goods" 
+                          onChange={(e)=>{
+                            const description_of_goods=e.target.value;
+                            setFieldValue('description_of_goods',description_of_goods)
+                            handleGoodsChange(description_of_goods)
+                            }
+                          }
+                          />
                           <ErrorMessage name="description_of_goods" component="div" className="text-red-500 text-sm" />
+                          {showgoods_Suggestions && (
+                            <ul className="absolute z-10 bg-white border border-gray-300 w-[29%] mt-1 max-h-40 overflow-y-auto">
+                              {goods_suggestions.map((element) => (
+                                <li
+                                  key={element._id}
+                                  onClick={() => handleSuggestionGoodsClick(element, setFieldValue)}
+                                  className="p-2 cursor-pointer hover:bg-gray-200"
+                                >
+                                  {element.description_goods}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </div>
                         <div className="form-group">
                           <label htmlFor="weight" className="form-label">Weight</label>
@@ -171,8 +233,28 @@ const InvoiceForm = () => {
                         </div>
                         <div className="form-group">
                           <label htmlFor="address" className="form-label">Address</label>
-                          <Field type="text" className="form-control" id="address" name="address" />
+                          <Field type="text" className="form-control" id="address" name="address" 
+                          onChange={(e)=>{
+                            const address=e.target.value;
+                            setFieldValue('address',address)
+                            handleAddressChange(address)
+                            }
+                          }
+                          />
                           <ErrorMessage name="address" component="div" className="text-red-500 text-sm" />
+                          {showaddress_Suggestions && (
+                            <ul className="absolute z-10 bg-white border border-gray-300 w-[30%] mt-1 max-h-40 overflow-y-auto">
+                              {address_suggestions.map((element) => (
+                                <li
+                                  key={element._id}
+                                  onClick={() => handleSuggestionClick(element, setFieldValue)}
+                                  className="p-2 cursor-pointer hover:bg-gray-200"
+                                >
+                                  {element.name}{" "}{element.address}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </div>
                         <div className="form-group">
                           <label htmlFor="from" className="form-label">From</label>
