@@ -51,7 +51,7 @@ export const Menus = [
     {
         title: "Invoice",
         icon: <PiInvoiceFill />,
-        navigateUrl:"invoiceform"
+        navigateUrl:"viewinvoice"
     },
     {
         title: "Profile",
@@ -69,3 +69,5 @@ export const Menus = [
 ];
 
 export const url="http://localhost:8000"
+
+// export const 
