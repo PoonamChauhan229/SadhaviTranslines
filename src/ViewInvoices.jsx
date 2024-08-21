@@ -55,7 +55,7 @@ const ViewInvoices = () => {
     };
       
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(invoices.map((invoice, index) => ({
+        const worksheet = XLSX.utils.json_to_sheet(newfilteredInvoices.map((invoice, index) => ({
             'Sr.No': index + 1,
             'Bill No': invoice.bill_no,
             'LR Date': new Date(invoice.date_lr).toLocaleDateString('en-US'),
@@ -180,12 +180,12 @@ const ViewInvoices = () => {
                         <table className="min-w-full bg-white border border-gray-200">
                             <thead>
                                 <tr className="bg-gray-200">
-                                    <th className="py-2 px-4 border-b text-sm"><GiDistraction/></th>
+                                    <th className="py-2 px-4 border-b text-sm "><GiDistraction/></th>
                                     <th className="py-2 px-4 border-b text-sm">Sr.No</th>
                                     <th className="py-2 px-4 border-b text-sm">Bill No</th>
                                     <th className="py-2 px-4 border-b text-sm">LR Date</th>
                                     <th className="py-2 px-4 border-b text-sm">LR NO</th>
-                                    <th className="py-2 px-4 border-b text-sm">Vehicle No</th>
+                                    <th className="py-2 px-4 border-b text-sm w-100">Vehicle No</th>
                                     <th className="py-2 px-4 border-b text-sm">Weight</th>
                                     <th className="py-2 px-4 border-b text-sm">Rate</th>
                                     <th className="py-2 px-4 border-b text-sm">Freight</th>
