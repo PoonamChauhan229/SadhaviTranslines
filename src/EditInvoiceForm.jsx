@@ -3,6 +3,8 @@ import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
 import { url } from './utils/constants';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 // Function to convert number to words
@@ -37,7 +39,8 @@ const numberToWords = (num) => {
 };
 
 
-const InvoiceForm = () => {
+const EditInvoiceForm = () => {
+  const [invoice,setInvoice]=useState("")
   const [address_suggestions, setaddress_Suggestions] = useState([]);
   const [showaddress_Suggestions, setShowaddress_Suggestions] = useState(false);
 
@@ -45,21 +48,21 @@ const InvoiceForm = () => {
   const [showgoods_Suggestions, setShowgoods_Suggestions] = useState(false);
 
   const initialValues = {
-    date_lr: '',
-    lr_no: '',
-    vehicle_no: '',
-    description_of_goods: '',
-    weight: '',
-    rate: '',
-    lr_charges: 50.00,
-    freight_amount: '',
-    igst_amount: '',
-    total_amount: '',
-    bill_no: '',
-    address: '',
-    amount_in_word: '',
-    from: '',
-    to: ''
+    date_lr: invoice.date_lr,
+    lr_no: invoice.lr_no,
+    vehicle_no: invoice.vehicle_no,
+    description_of_goods: invoice.description_of_goods,
+    weight: invoice.weight,
+    rate: invoice.rate,
+    lr_charges: invoice.lr_charges,
+    freight_amount: invoice.freight_amount,
+    igst_amount: invoice.igst_amount,
+    total_amount: invoice.total_amount,
+    bill_no: invoice.bill_no,
+    address: invoice.address,
+    amount_in_word: invoice.amount_in_word,
+    from: invoice.from,
+    to: invoice.to
   };
 
   const validationSchema = Yup.object().shape({
@@ -127,16 +130,29 @@ const InvoiceForm = () => {
   };
   const handleSubmit = (values) => {
     console.log(values);
-    postInvoices(values)
+    putInvoices(values)
   };
 
-  const postInvoices=async(invoice)=>{
-    await axios.post(`${url}/addinvoice`,invoice)
+  const putInvoices=async(invoice)=>{
+    await axios.put(`${url}/updateinvoice`,invoice)
   }
 
+  const {id}=useParams()
+  useEffect(()=>{
+    getEditInvoice()
+  },[])
+
+  const getEditInvoice=async()=>{
+    const getInvoice=await axios.get(`${url}/editinvoice/${id}`)
+    console.log(getInvoice.data[0])
+    setInvoice(getInvoice.data[0])
+    
+  }
+  
   return (
-    <div className='absolute top-10 left-[19%] right-0 px-4'>
-      <div className="container mx-auto p-4 max-w-screen-lg">
+   <>
+   {invoice && <div className='absolute top-10 left-[19%] right-0 px-4'>
+         <div className="container mx-auto p-4 max-w-screen-lg">
         <div className="flex justify-center">
           <div className="w-full">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -145,7 +161,7 @@ const InvoiceForm = () => {
                   <Form>
                     <div className="p-5 ">
                       <h1 className="text-gray-900 mb-3 text-xl font-semibold">
-                        Add Invoice
+                        Edit Invoice
                       </h1>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div className="form-group">
@@ -274,7 +290,7 @@ const InvoiceForm = () => {
                           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                           </svg>
-                          Create Invoice
+                          Update & Save
                         </button>
                       </div>
                     </div>
@@ -286,7 +302,10 @@ const InvoiceForm = () => {
         </div>
       </div>
     </div>
+    }
+   
+   </>
   );
 };
 
-export default InvoiceForm;
+export default EditInvoiceForm;

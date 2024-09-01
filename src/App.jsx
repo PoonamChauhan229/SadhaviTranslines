@@ -5,6 +5,7 @@ import InvoiceForm from './InvoiceForm'
 import SideBar from './SideBar'
 import { useState } from 'react'
 import ViewInvoices from './ViewInvoices'
+import EditInvoiceForm from './EditInvoiceForm'
 
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
     <Routes>
         <Route path='/createinvoices' element={<InvoiceForm/>}/>
         <Route path='/viewinvoice' element={<ViewInvoices/>}/>
+        <Route path='/editinvoice/:id' element={<EditInvoiceForm/>}/>
       </Routes>
     </>
   )
